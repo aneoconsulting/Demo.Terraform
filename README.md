@@ -25,7 +25,7 @@ your local machine. The application is composed of:
 * A docker container for Wordpress
 * A docker container for MariaDB
 
-To deploy the application:
+To deploy the application, from the **root** of the directory:
 
 ```bash
 terraform init
