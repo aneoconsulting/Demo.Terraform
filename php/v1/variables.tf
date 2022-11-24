@@ -1,6 +1,6 @@
 # Private network name
-variable "private_network_name" {
-  description = "Private network name"
+variable "network_name" {
+  description = "Network name"
   type        = string
 }
 
@@ -14,6 +14,12 @@ variable "nginx_repository" {
 variable "nginx_tag" {
   description = "Docker image tag for Nginx"
   type        = string
+}
+
+# Nginx port
+variable "nginx_port" {
+  description = "Nginx port"
+  type        = number
 }
 
 # Docker image repository for PHP
@@ -39,10 +45,4 @@ variable "php_count" {
   description = "Number of PHP containers"
   type        = number
   default     = 3
-}
-
-# Nginx port
-variable "nginx_port" {
-  description = "Nginx port"
-  type        = number
 }
