@@ -1,6 +1,6 @@
 # Private network name
-variable "private_network_name" {
-  description = "Private network name"
+variable "network_name" {
+  description = "Network name"
   type        = string
 }
 
@@ -13,6 +13,18 @@ variable "nginx_repository" {
 # Docker image tag for Nginx
 variable "nginx_tag" {
   description = "Docker image tag for Nginx"
+  type        = string
+}
+
+# Nginx port
+variable "nginx_port" {
+  description = "Nginx port"
+  type        = number
+}
+
+# Nginx config path
+variable "nginx_config_path" {
+  description = "Nginx config path"
   type        = string
 }
 
@@ -31,17 +43,5 @@ variable "php_tag" {
 # folder of the PHP app
 variable "app_folder" {
   description = "Path to the php application code"
-  type        = string
-}
-
-# Nginx port
-variable "nginx_port" {
-  description = "Nginx port"
-  type        = number
-}
-
-# Nginx config path
-variable "nginx_config_path" {
-  description = "Nginx config path"
   type        = string
 }
