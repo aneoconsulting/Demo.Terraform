@@ -1,7 +1,7 @@
 output "web_urls" {
   description = "Web URL of the PHP applications"
   value       = {
-    app1 = module.app1.url,
-    app2 = module.app2.url,
+    app_1 = module.app_1.url,
+    app_2 = module.app_2.url,
   }
 }

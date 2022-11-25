@@ -20,15 +20,18 @@ server {
 EOT
 }
 
+# Generate Nginx configuration
 resource "local_file" "nginx_conf" {
   content  = local.nginx_conf
   filename = "${path.root}/generated/${local.prefix}-nginx.conf"
 }
 
+# Nginx docker image
 resource "docker_image" "nginx" {
   name = "${var.nginx.repository}:${var.nginx.tag}"
 }
 
+# Nginx docker container
 resource "docker_container" "nginx" {
   name         = "${local.prefix}-nginx"
   image        = docker_image.nginx.image_id

@@ -10,7 +10,7 @@ locals {
   name = "${var.prefix}-${random_string.suffix.result}"
 }
 
-
-resource "docker_network" "private_network" {
+# Network
+resource "docker_network" "network" {
   name = local.name
 }
