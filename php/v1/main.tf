@@ -18,8 +18,7 @@ server {
   }
 }
 EOT
-  php_image_name = "${var.php_repository}:${var.php_tag}"
-  nginx_image_name = "${var.nginx_repository}:${var.nginx_tag}"
+  php_app_path = abspath(var.app_folder)
 }
 
 # Network
@@ -29,7 +28,7 @@ resource "docker_network" "network" {
 
 # PHP docker image
 resource "docker_image" "php" {
-  name = local.php_image_name
+  name = "${var.php_repository}:${var.php_tag}"
 }
 
 # PHP docker container
@@ -42,7 +41,7 @@ resource "docker_container" "php" {
   mounts {
     type   = "bind"
     target = "/app"
-    source = abspath(var.app_folder)
+    source = local.php_app_path
   }
 }
 
@@ -54,7 +53,7 @@ resource "local_file" "nginx_conf" {
 
 # Nginx docker image
 resource "docker_image" "nginx" {
-  name = local.nginx_image_name
+  name = "${var.nginx_repository}:${var.nginx_tag}"
 }
 
 # Nginx docker container
@@ -71,7 +70,7 @@ resource "docker_container" "nginx" {
   mounts {
     type   = "bind"
     target = "/app"
-    source = abspath(var.app_folder)
+    source = local.php_app_path
   }
   ports {
     external = var.nginx_port

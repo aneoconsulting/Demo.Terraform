@@ -13,6 +13,6 @@ resource "docker_container" "php" {
   mounts {
     type   = "bind"
     target = "/app"
-    source = abspath(var.php.app_folder_path)
+    source = local.php_app_path
   }
 }
