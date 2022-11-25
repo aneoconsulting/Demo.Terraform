@@ -18,6 +18,8 @@ server {
   }
 }
 EOT
+  php_image_name = "${var.php_repository}:${var.php_tag}"
+  nginx_image_name = "${var.nginx_repository}:${var.nginx_tag}"
 }
 
 # Network
@@ -27,7 +29,7 @@ resource "docker_network" "network" {
 
 # PHP docker image
 resource "docker_image" "php" {
-  name = "${var.php_repository}:${var.php_tag}"
+  name = local.php_image_name
 }
 
 # PHP docker container
@@ -52,7 +54,7 @@ resource "local_file" "nginx_conf" {
 
 # Nginx docker image
 resource "docker_image" "nginx" {
-  name = "${var.nginx_repository}:${var.nginx_tag}"
+  name = local.nginx_image_name
 }
 
 # Nginx docker container
