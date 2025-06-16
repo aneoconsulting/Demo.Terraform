@@ -1,6 +1,12 @@
+# Database docker image
+resource "docker_image" "db" {
+  name         = "${var.db_repository}:${var.db_tag}"
+  keep_locally = true
+}
+
 resource "docker_container" "db" {
   name         = "db"
-  image        = "${var.db_repository}:${var.db_tag}"
+  image        = docker_image.db.image_id
   restart      = "always"
   network_mode = docker_network.private_network.name
   mounts {

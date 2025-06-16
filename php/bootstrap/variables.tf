@@ -33,7 +33,7 @@ variable "php_tag" {
   ...
 }
 
-# folder of the PHP app
-variable "app_folder" {
+# path of the PHP app file
+variable "app_file" {
   ...
 }

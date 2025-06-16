@@ -1,6 +1,7 @@
 # PHP docker image
 resource "docker_image" "php" {
-  name = "${var.php.repository}:${var.php.tag}"
+  name         = "${var.php.repository}:${var.php.tag}"
+  keep_locally = true
 }
 
 # PHP container
@@ -10,9 +11,12 @@ resource "docker_container" "php" {
   image        = docker_image.php.image_id
   restart      = "always"
   network_mode = var.network_name
-  mounts {
-    type   = "bind"
-    target = "/app"
-    source = local.php_app_path
+
+  dynamic "upload" {
+    for_each = local.php_files
+    content {
+      file   = "/app/${upload.key}"
+      source = "${var.php.app_folder_path}/${upload.key}"
+    }
   }
 }

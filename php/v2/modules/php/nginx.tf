@@ -20,15 +20,10 @@ server {
 EOT
 }
 
-# Generate Nginx configuration
-resource "local_file" "nginx_conf" {
-  content  = local.nginx_conf
-  filename = "${path.root}/generated/${local.prefix}-nginx.conf"
-}
-
 # Nginx docker image
 resource "docker_image" "nginx" {
-  name = "${var.nginx.repository}:${var.nginx.tag}"
+  name         = "${var.nginx.repository}:${var.nginx.tag}"
+  keep_locally = true
 }
 
 # Nginx docker container
@@ -37,16 +32,16 @@ resource "docker_container" "nginx" {
   image        = docker_image.nginx.image_id
   restart      = "always"
   network_mode = var.network_name
-  mounts {
-    type   = "bind"
-    target = "/etc/nginx/conf.d/server.conf"
-    source = abspath(local_file.nginx_conf.filename)
+  upload {
+    file    = "/etc/nginx/conf.d/server.conf"
+    content = local.nginx_conf
   }
-  mounts {
-    type   = "bind"
-    target = "/app"
-    source = local.php_app_path
-
+  dynamic "upload" {
+    for_each = local.php_files
+    content {
+      file   = "/app/${upload.key}"
+      source = "${var.php.app_folder_path}/${upload.key}"
+    }
   }
   ports {
     external = var.nginx.port

@@ -18,7 +18,6 @@ server {
   }
 }
 EOT
-  php_app_path = abspath(var.app_folder)
 }
 
 # Network
@@ -28,7 +27,8 @@ resource "docker_network" "network" {
 
 # PHP docker image
 resource "docker_image" "php" {
-  name = "${var.php_repository}:${var.php_tag}"
+  name         = "${var.php_repository}:${var.php_tag}"
+  keep_locally = true
 }
 
 # PHP docker container
@@ -38,22 +38,16 @@ resource "docker_container" "php" {
   image        = docker_image.php.image_id
   restart      = "always"
   network_mode = docker_network.network.name
-  mounts {
-    type   = "bind"
-    target = "/app"
-    source = local.php_app_path
+  upload {
+    file   = "/app/index.php"
+    source = abspath(var.app_file)
   }
-}
-
-# Generate Nginx configuration file
-resource "local_file" "nginx_conf" {
-  content  = local.nginx_conf
-  filename = "${path.root}/generated/nginx.conf"
 }
 
 # Nginx docker image
 resource "docker_image" "nginx" {
-  name = "${var.nginx_repository}:${var.nginx_tag}"
+  name         = "${var.nginx_repository}:${var.nginx_tag}"
+  keep_locally = true
 }
 
 # Nginx docker container
@@ -62,15 +56,13 @@ resource "docker_container" "nginx" {
   image        = docker_image.nginx.image_id
   restart      = "always"
   network_mode = docker_network.network.name
-  mounts {
-    type   = "bind"
-    target = "/etc/nginx/conf.d/server.conf"
-    source = abspath(local_file.nginx_conf.filename)
+  upload {
+    file    = "/etc/nginx/conf.d/server.conf"
+    content = local.nginx_conf
   }
-  mounts {
-    type   = "bind"
-    target = "/app"
-    source = local.php_app_path
+  upload {
+    file   = "/app/index.php"
+    source = abspath(var.app_file)
   }
   ports {
     external = var.nginx_port

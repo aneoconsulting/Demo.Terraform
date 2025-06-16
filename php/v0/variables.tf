@@ -40,8 +40,8 @@ variable "php_tag" {
   type        = string
 }
 
-# folder of the PHP app
-variable "app_folder" {
+# path of the PHP app file
+variable "app_file" {
   description = "Path to the php application code"
   type        = string
 }

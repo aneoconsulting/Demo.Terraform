@@ -1,6 +1,12 @@
+# Wordpress docker image
+resource "docker_image" "wordpress" {
+  name         = "${var.wordpress_repository}:${var.wordpress_tag}"
+  keep_locally = true
+}
+
 resource "docker_container" "wordpress" {
   name         = "wordpress"
-  image        = "${var.wordpress_repository}:${var.wordpress_tag}"
+  image        = docker_image.wordpress.image_id
   restart      = "always"
   network_mode = docker_network.private_network.name
   env          = [
