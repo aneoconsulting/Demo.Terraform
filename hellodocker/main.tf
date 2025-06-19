@@ -10,7 +10,7 @@ terraform {
 resource "docker_container" "hello" {
   name    = "hello"
   image   = "alpine"
-  command = ["tail", "-f", "/dev/null"]
+  command = ["sleep", "infinity"]
 }
 
 output "container_id" {
