@@ -1,4 +1,5 @@
 locals {
+  php_app = file(var.app_file)
   nginx_conf = <<EOT
 upstream php {
 %{for i in range(var.php_count)~}
@@ -39,8 +40,8 @@ resource "docker_container" "php" {
   restart      = "always"
   network_mode = docker_network.network.name
   upload {
-    file   = "/app/index.php"
-    source = abspath(var.app_file)
+    file    = "/app/index.php"
+    content = local.php_app
   }
 }
 
@@ -62,7 +63,7 @@ resource "docker_container" "nginx" {
   }
   upload {
     file   = "/app/index.php"
-    source = abspath(var.app_file)
+    content = local.php_app
   }
   ports {
     external = var.nginx_port

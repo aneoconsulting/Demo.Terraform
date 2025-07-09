@@ -13,10 +13,10 @@ resource "docker_container" "php" {
   network_mode = var.network_name
 
   dynamic "upload" {
-    for_each = local.php_files
+    for_each = local.uploads
     content {
-      file   = "/app/${upload.key}"
-      source = "${var.php.app_folder_path}/${upload.key}"
+      file    = upload.key
+      content = upload.value
     }
   }
 }

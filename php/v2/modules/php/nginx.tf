@@ -37,10 +37,10 @@ resource "docker_container" "nginx" {
     content = local.nginx_conf
   }
   dynamic "upload" {
-    for_each = local.php_files
+    for_each = local.uploads
     content {
-      file   = "/app/${upload.key}"
-      source = "${var.php.app_folder_path}/${upload.key}"
+      file    = upload.key
+      content = upload.value
     }
   }
   ports {

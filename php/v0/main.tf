@@ -16,8 +16,8 @@ resource "docker_container" "php" {
   restart      = "always"
   network_mode = docker_network.network.name
   upload {
-    file   = "/app/index.php"
-    source = abspath(var.app_file)
+    file    = "/app/index.php"
+    content = file(var.app_file)
   }
 }
 
@@ -35,11 +35,11 @@ resource "docker_container" "nginx" {
   network_mode = docker_network.network.name
   upload {
     file   = "/etc/nginx/conf.d/server.conf"
-    source = abspath(var.nginx_config_path)
+    content = file(var.nginx_config_path)
   }
   upload {
-    file   = "/app/index.php"
-    source = abspath(var.app_file)
+    file    = "/app/index.php"
+    content = "dummy"
   }
   ports {
     external = var.nginx_port

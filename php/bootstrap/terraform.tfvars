@@ -19,5 +19,5 @@ php_repository = "php"
 # Docker image tag for PHP
 php_tag = "fpm"
 
-# folder of the PHP app
-app_folder = "app"
+# path of the PHP app file
+app_file = "app/index.php"
